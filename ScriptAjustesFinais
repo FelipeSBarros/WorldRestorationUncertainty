@@ -31,13 +31,13 @@ gdalwarp [--help-general] [--formats]
     srcfile* dstfile
     
 #g1
-gdalwarp "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -overwrite
+gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -overwrite
 
 #g2
-gdalwarp "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal_aligned.tif" -overwrite
+gdalwarp "/home/felipe/Repos//WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5KmFocal_aligned.tif" -overwrite
 
 #g3
-gdalwarp "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal_aligned.tif" -overwrite
+gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5KmFocal_aligned.tif" -overwrite
 ```
   
 * Merging (Suming) all raster data aligned in the previous step  
@@ -48,7 +48,7 @@ gdal_calc.py --calc=expression --outfile=out_filename [-A filename]
 gdal_calc.py  -A  "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -B "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal_aligned.tif" -C "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal_aligned.tif" --outfile="/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif" --calc="A+B+C"
 ```
 
-* Removing 0 from ouside study area:  
+* Removing 0 from ouside study area:  **NOT NECESSARY ANYMORE AFTER CHANGING THE BIOME TYPO AND USING CLIP FEATURE COLLECTION**
 
 ```
 gdal_calc.py -A "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif" -B "/home/novaresio/Projetos/World Restoration Uncertainty/Biomas/forestAreasNotBin.tif" --outfile="/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForest_5kmFocal_final.tif" --calc="A*B"
