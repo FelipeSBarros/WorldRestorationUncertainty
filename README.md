@@ -1,8 +1,8 @@
-## 1) Defining forested areas:
-# Updating forested areas: 2017
-# The 2017 biome data  (https://ecoregions2017.appspot.com/) where subsetted to:
-# 'Mangroves'  'Temperate Broadleaf & Mixed Forests'  'Temperate Conifer Forests'  'Tropical & Subtropical Coniferous Forests'  'Tropical & Subtropical Dry Broadleaf Forests'  'Tropical & Subtropical Moist Broadleaf Forests' 
-# The KML was sent to GEE and the analysis resultas done there, were clipped to this area;
+# 1) Defining forested areas:
+### Updating forested areas: 2017
+### The 2017 biome data  (https://ecoregions2017.appspot.com/) where subsetted to:
+### 'Mangroves'  'Temperate Broadleaf & Mixed Forests'  'Temperate Conifer Forests'  'Tropical & Subtropical Coniferous Forests'  'Tropical & Subtropical Dry Broadleaf Forests'  'Tropical & Subtropical Moist Broadleaf Forests' 
+### The KML was sent to GEE and the analysis resultas done there, were clipped to this area;
 
 ## 2) Using GEE (https://code.earthengine.google.com/46c209046cecd3349e5b36eed5de67e3) the following analysiswas done:  
 * Using Hansen's data v1.4(2000-2016), the forest loss were taken from forest density;  
@@ -11,7 +11,7 @@
 
 ## 3) On PC (bash/gdal):
 * Adequating GEE results, setting the same extent, and pixel alignment;  
-# gdal warp para bioclim todo  
+### gdal warp para bioclim todo  
 ```
 gdalwarp [--help-general] [--formats]
     [-s_srs srs_def] [-t_srs srs_def] [-to "NAME=VALUE"]* [-novshiftgrid]
@@ -41,6 +41,7 @@ gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalFo
 ```
   
 * Merging (Suming) all raster data aligned in the previous step  
+
 ```
 gdal_calc.py --calc=expression --outfile=out_filename [-A filename]
              [--A_band=n] [-B...-Z filename] [other_options]
@@ -59,8 +60,10 @@ gdal_calc.py -A "/home/novaresio/Projetos/World Restoration Uncertainty/Results/
 gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7/product/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESACCI_alignedResampled.tif" -overwrite
 ```
 
-## 3) On PC (R):
-* Applying the equation
+## 3) On PC (R):  
+
+* Applying the equation  
+
 ```
 library(raster)
 result <- raster("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif")
@@ -69,12 +72,16 @@ eq <- 1.37595 - 0.23498 * log10(result + 1)
 plot(eq)
 writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_Equation.tif")
 ```
-* Normalizing equation
+
+* Normalizing equation  
+
 ```
 eq <- eq/maxValue(eq) # check if maxValue(eq) == 1.37595
 writeRaster(eq, "./1KMGlobalForest_5kmFocal_EquationNorm.tif")
 ```
-* Removing NON RESTORABLE AREAS
+
+* Removing NON RESTORABLE AREAS  
+
 ```
 library(raster)
 lanuse<- raster("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESACCI_alignedResampled.tif")
