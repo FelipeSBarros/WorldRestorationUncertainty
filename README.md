@@ -34,10 +34,10 @@ gdalwarp [--help-general] [--formats]
 gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -overwrite
 
 #g2
-gdalwarp "/home/felipe/Repos//WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5KmFocal_aligned.tif" -overwrite
+gdalwarp "/home/felipe/Repos//WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal_aligned.tif" -overwrite
 
 #g3
-gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5KmFocal_aligned.tif" -overwrite
+gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal_aligned.tif" -overwrite
 ```
   
 * Merging (Suming) all raster data aligned in the previous step  
@@ -45,7 +45,7 @@ gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalFo
 gdal_calc.py --calc=expression --outfile=out_filename [-A filename]
              [--A_band=n] [-B...-Z filename] [other_options]
 
-gdal_calc.py  -A  "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -B "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal_aligned.tif" -C "/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal_aligned.tif" --outfile="/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif" --calc="A+B+C"
+gdal_calc.py  -A  "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -B "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal_aligned.tif" -C "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal_aligned.tif" --outfile="/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif" --calc="A+B+C"
 ```
 
 * Removing 0 from ouside study area:  **NOT NECESSARY ANYMORE AFTER CHANGING THE BIOME TYPO AND USING CLIP FEATURE COLLECTION**
@@ -56,18 +56,18 @@ gdal_calc.py -A "/home/novaresio/Projetos/World Restoration Uncertainty/Results/
 * Organinzing land use from ESA CCI to the same extent and the same resolution  
 
 ```
-gdalwarp "/home/novaresio/Projetos/World Restoration Uncertainty/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7/product/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/World Restoration Uncertainty/Results/WorldRestorationUncertainty/ESACCI_alignedResampled.tif" -overwrite
+gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7/product/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESACCI_alignedResampled.tif" -overwrite
 ```
 
 ## 3) On PC (R):
 * Applying the equation
 ```
 library(raster)
-result <- raster("/home/novaresio/Projetos/World Restoration Uncertainty/Results/GEE/1KMGlobalForest_5kmFocal_final.tif")
+result <- raster("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif")
 
 eq <- 1.37595 - 0.23498 * log10(result + 1)
 plot(eq)
-writeRaster(eq, "./1KMGlobalForest_5kmFocal_Equation.tif")
+writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_Equation.tif")
 ```
 * Normalizing equation
 ```
@@ -77,10 +77,11 @@ writeRaster(eq, "./1KMGlobalForest_5kmFocal_EquationNorm.tif")
 * Removing NON RESTORABLE AREAS
 ```
 library(raster)
-lanuse<- raster("./Results/WorldRestorationUncertainty/ESACCI_alignedResampled.tif")
-lanuse2 <- (lanuse %in% c(10, 11, 12, 20, 30, 130, 150, 151, 152, 153))*lanuse'
-writeRaster(lanuse2, "./ESAConsideredAreas.tif")
-r <- raster ("/home/novaresio/Projetos/World Restoration Uncertainty/Results/WorldRestorationUncertainty/1KMGlobalForest_5kmFocal_EquationNorm.tif")
+lanuse<- raster("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESACCI_alignedResampled.tif")
+lanuse2 <- (lanuse %in% c(10, 11, 12, 20, 30, 130, 150, 151, 152, 153))*lanuse
+writeRaster(lanuse2, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESAConsideredAreas.tif")
+
+r <- raster ("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif")
 final <- r*(lanuse2>0)
-writeRaster(final, "./finalMasked.tif")
+writeRaster(final, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/finalMasked.tif")
 ```
