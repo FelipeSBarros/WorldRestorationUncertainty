@@ -1,7 +1,12 @@
 # 1) Defining forested areas:
 ### Updating forested areas: 2017
-### The 2017 biome data  (https://ecoregions2017.appspot.com/) where subsetted to:
-### 'Mangroves'  'Temperate Broadleaf & Mixed Forests'  'Temperate Conifer Forests'  'Tropical & Subtropical Coniferous Forests'  'Tropical & Subtropical Dry Broadleaf Forests'  'Tropical & Subtropical Moist Broadleaf Forests' 
+ The 2017 biome data  (https://ecoregions2017.appspot.com/) where subsetted to:  
+* 'Temperate Broadleaf & Mixed Forests'  
+* 'Temperate Conifer Forests'  
+* 'Tropical & Subtropical Coniferous Forests'  
+* 'Tropical & Subtropical Dry Broadleaf Forests'  
+* 'Tropical & Subtropical Moist Broadleaf Forests'  
+
 ### The KML was sent to GEE and the analysis resultas done there, were clipped to this area;
 
 ## 2) Using GEE (https://code.earthengine.google.com/46c209046cecd3349e5b36eed5de67e3) the following analysiswas done:  
@@ -31,13 +36,13 @@ gdalwarp [--help-general] [--formats]
     srcfile* dstfile
     
 #g1
-gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -overwrite
+gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG1_5kmFocal_aligned.tif" -overwrite
 
 #g2
-gdalwarp "/home/felipe/Repos//WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal_aligned.tif" -overwrite
+gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG2_5kmFocal_aligned.tif" -overwrite
 
 #g3
-gdalwarp "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5KmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/felipe/Repos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal_aligned.tif" -overwrite
+gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForestG3_5kmFocal_aligned.tif" -overwrite
 ```
   
 * Merging (Suming) all raster data aligned in the previous step  
@@ -77,7 +82,7 @@ writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GE
 
 ```
 eq <- eq/maxValue(eq) # check if maxValue(eq) == 1.37595
-writeRaster(eq, "./1KMGlobalForest_5kmFocal_EquationNorm.tif")
+writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif")
 ```
 
 * Removing NON RESTORABLE AREAS  
@@ -85,7 +90,7 @@ writeRaster(eq, "./1KMGlobalForest_5kmFocal_EquationNorm.tif")
 ```
 library(raster)
 lanuse<- raster("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESACCI_alignedResampled.tif")
-lanuse2 <- (lanuse %in% c(10, 11, 12, 20, 30, 130, 150, 151, 152, 153))*lanuse
+lanuse2 <- (! lanuse %in% c(190, 210))*lanuse
 writeRaster(lanuse2, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESAConsideredAreas.tif")
 
 r <- raster ("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif")
