@@ -64,14 +64,10 @@ RestorableAmount <- raster("./1KMGlobalForest_ForestAmount_alignedMergedMergeQGI
 #area(RestorableAmount, filename = "./pixelArea.tif", na.rm = TRUE)
 # If x is a Raster* object: RasterLayer or RasterBrick. Cell values represent the size of the cell in km2, or the relative size if weights=TRUE
 #area <- raster("./pixelArea.tif")
-#area <- area/10000 #Area em ha
-#writeRaster(area, "./AreaHa.tif")
 
-area <- raster("./AreaHa.tif")
 ESA <- raster("./ESACCI_alignedResampled.tif")
-# writeRaster(ESA, "./ESA_Mod.tif")
 #value = (RestorableAmount*area)/100
-#writeRaster(value, "./RestoableAmount_m2.tif")
+#writeRaster(value, "./RestoableAmount_m2.tif", overwrite=TRUE)
 value <- raster("./RestoableAmount_m2.tif")
 
 #Analaysis by biome
