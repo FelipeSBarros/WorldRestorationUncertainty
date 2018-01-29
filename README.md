@@ -72,20 +72,23 @@ gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/ESACCI-LC-L4-LCCS
 ```
 library(raster)
 result <- raster("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif")
-
+# result[result == 0] <- NA
 eq <- 1.37595 - 0.23498 * log10(result + 1)
 plot(eq)
-writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_Equation.tif")
+writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_Equation.tif", overwrite = TRUE)
 ```
 
 * Normalizing equation  
 
 ```
 eq <- eq/maxValue(eq) # check if maxValue(eq) == 1.37595
-writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif")
+writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif", overwrite = TRUE)
 ```
-
-* Removing NON RESTORABLE AREAS  
+* Removing 0 values to NA
+```
+gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif" -dstnodata "0" "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm_NA.tif" -overwrite
+```
+* Removing NON RESTORABLE AREAS  NOT NECESSARY
 
 ```
 library(raster)
