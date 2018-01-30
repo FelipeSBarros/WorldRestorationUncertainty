@@ -64,7 +64,19 @@ gdal_calc.py -A "/home/novaresio/Projetos/World Restoration Uncertainty/Results/
 ```
 gdalwarp "/home/novaresio/Projetos/WorldRestorationUncertainty/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7/product/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 -r near "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/ESACCI_alignedResampled.tif" -overwrite
 ```
-
+* Organizing (Rasterizing) Country data
+```
+Usage: gdal_rasterize [-b band]* [-i] [-at]
+       {[-burn value]* | [-a attribute_name] | [-3d]} [-add]
+       [-l layername]* [-where expression] [-sql select_statement]
+       [-dialect dialect] [-of format] [-a_srs srs_def] [-to NAME=VALUE]*
+       [-co "NAME=VALUE"]* [-a_nodata value] [-init value]*
+       [-te xmin ymin xmax ymax] [-tr xres yres] [-tap] [-ts width height]
+       [-ot {Byte/Int16/UInt16/UInt32/Int32/Float32/Float64/
+             CInt16/CInt32/CFloat32/CFloat64}] [-q]
+       <src_datasource> <dst_filename>
+gdal_rasterize -a ID_0 "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/gadm28_adm0.shp" -l "gadm28_adm0" -tr 0.00833333 -0.00833333 -te -180.0000000000000000 -59.9999400000000094 179.9998560000000225 90.0000000000000000 "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/gadm28_adm0.tif"
+```
 ## 3) On PC (R):  
 
 * Applying the equation  
