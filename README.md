@@ -85,15 +85,15 @@ gdal_rasterize -a ID_0 "/home/novaresio/Projetos/WorldRestorationUncertainty/Res
 library(raster)
 result <- raster("/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_alignedMerged.tif")
 # result[result == 0] <- NA
-eq <- 1.37595 - 0.23498 * log10(result + 1)
-plot(eq)
+eq <- 1.37595 - 0.23498 * log(result + 1)
+#plot(eq)
 writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_Equation.tif", overwrite = TRUE)
 ```
 
 * Normalizing equation  
 
 ```
-eq <- eq/maxValue(eq) # check if maxValue(eq) == 1.37595
+eq <- (eq-0.291489)/1.084461 # check if maxValue(eq) == 1.37595
 writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif", overwrite = TRUE)
 ```
 * Removing 0 values to NA
