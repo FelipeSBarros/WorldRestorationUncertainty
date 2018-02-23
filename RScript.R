@@ -69,33 +69,21 @@ gdalwarp("./1KMGlobalForestG3_RestAmount.tif",tr = c(0.0083333, -0.00833333), te
 g3 <- raster("./1KMGlobalForestG3_5kmFocal_aligned.tif")
 plot(g3)
 
-RestorableAmount <- raster("./1KMGlobalForest_ForestAmount_alignedMergedMergeQGIS.tif")
-#area(RestorableAmount, filename = "./pixelArea.tif", na.rm = TRUE)
-# If x is a Raster* object: RasterLayer or RasterBrick. Cell values represent the size of the cell in km2, or the relative size if weights=TRUE
-#area <- raster("./pixelArea.tif")
+## merging
+## BASH GDAL:
+#gdal_calc.py -A "./GEE/1KMGlobalForestG1_RestAmount_aligned.tif" -B "./GEE/1KMGlobalForestG2_RestAmount_aligned.tif" -C "./GEE/1KMGlobalForestG3_RestAmount_aligned.tif" --outfile="./GEE/1KMGlobalForestG1_RestAmount_alignedMerged.tif" --calc="A+B+C"
+merged <- raster("./1KMGlobalForestG1_RestAmount_alignedMerged.tif")
+plot(merged)
+dev.off()
+# Removing 0
+gdalwarp("./1KMGlobalForestG1_RestAmount_alignedMerged.tif", dstnodata = 0, dstfile = "./1KMGlobalForest_RestAmount_alignedMergedNA.tif", overwrite = TRUE)
 
-ESA <- raster("./ESACCI_alignedResampled.tif")
-#value = (RestorableAmount*area)/100
-#writeRaster(value, "./RestoableAmount_m2.tif", overwrite=TRUE)
-value <- raster("./RestoableAmount_m2.tif")
+RestorableAmount <- raster("./1KMGlobalForest_RestAmount_alignedMergedNA.tif")
+plot(RestorableAmount)
+dev.off()
 
-#Analaysis by biome
-ESAsd <- zonal(value, ESA, "sd", na.rm=TRUE, progress="text")
-ESAmean <- zonal(value, ESA, "mean", na.rm=TRUE, progress="text")
-ESAsum <- zonal(value, ESA, "sum", na.rm=TRUE, progress="text")
-write.csv(ESAsd, "./ESAsd.csv", row.names = FALSE)
-write.csv(ESAmean, "./ESAmean.csv", row.names = FALSE)
-write.csv(ESAsum, "./ESAsum.csv", row.names = FALSE)
-
-
-## tryied but didn't work
-#Analysis by country
-counytry <- readOGR(".", "gadm28_adm0")
-head(counytry[,c(2,4)])
-counytry <- counytry[,c(2,4)]
-CTRYsd <- extract(value, counytry, fun=function(x)sd(x, na.rm=TRUE), df=TRUE)
-CTRYmean <- extract(value, counytry, fun="mean", na.rm=TRUE)
-CTRYsum <- extract(value, counytry, "sum", na.rm=TRUE, progress="text")
-write.csv(CTRYsd, "./ESAsd.csv", row.names = FALSE)
-write.csv(CTRYmean, "./ESAmean.csv", row.names = FALSE)
-write.csv(CTRYsum, "./ESAsum.csv", row.names = FALSE)
+##Masking to forest biomes
+forestBiomes <- readOGR("../Ecoregions2017/", "ForestBiomes")
+mask(x = RestorableAmount, mask = forestBiomes, filename = "./1KMGlobalForest_RestAmount_alignedMergedNAMaskedForesBiomes.tif", overwrite = TRUE)
+result <- raster("./1KMGlobalForest_RestAmount_alignedMergedNAMaskedForesBiomes.tif")
+plot(result)
