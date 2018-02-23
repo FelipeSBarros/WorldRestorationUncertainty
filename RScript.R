@@ -1,5 +1,6 @@
-# setwd("D://Repos/WorldRestorationUncertainty/GEE/")
+# setwd("./GEE/")
 rm(list=ls())
+gc()
 
 library(raster)
 library(gdalUtils)
@@ -22,8 +23,9 @@ g3 <- raster("./1KMGlobalForestG3_5kmFocal_aligned.tif")
 plot(g3)
 
 ## merging
-# DONE WITH QGIS
-merged <- raster("./1KMGlobalForest_5kmFocal_alignedMerged.tif")
+merged <- g1+g2+g3
+plot(merged)
+writeRaster(merged, "./1KMGlobalForest_5kmFocal_alignedMerged.tif", overwrite = TRUE)
 dev.off()
 
 # Organinzing ESA img
@@ -31,17 +33,24 @@ gdalwarp("./ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif",tr = c(0.0083333, -0
 
 ## 3 applying the equetion
 library(raster)
-result <- raster("./1KMGlobalForest_5kmFocal_alignedMergedMergeQGIS.tif")
+result <- raster("./1KMGlobalForest_5kmFocal_alignedMerged.tif")
+gdalwarp("./1KMGlobalForest_5kmFocal_alignedMerged.tif", dstnodata = 0, dstfile = "./1KMGlobalForest_5kmFocal_alignedMergedNA.tif", overwrite = TRUE)
+result <- raster("./1KMGlobalForest_5kmFocal_alignedMergedNA.tif")
 #plot(result)
 
-eq <- (1.37595 - 0.23498 * log10(result + 1))
+calc(result, function(x){(1.37595 - 0.23498 * log(x + 1))}, filename = "./1KMGlobalForest_5kmFocal_Equation.tif", overwrite = TRUE)
+eq <- raster("./1KMGlobalForest_5kmFocal_Equation.tif")
 #plot(eq)
-writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_Equation.tif")
 
 ##Normalizing equetaion
-eq <- eq/maxValue(eq) # check if maxValue(eq) == 1.37595
-writeRaster(eq, "/home/novaresio/Projetos/WorldRestorationUncertainty/Results/GEE/1KMGlobalForest_5kmFocal_EquationNorm.tif")
+calc(eq, function(x){(x - 0.291489) / 1.084461}, filename = "./1KMGlobalForest_5kmFocal_EquationNorm.tif", overwrite = TRUE)
+eq <- raster("./1KMGlobalForest_5kmFocal_EquationNorm.tif")
 
+##Masking to forest biomes
+forestBiomes <- readOGR("../Ecoregions2017/", "ForestBiomes")
+mask(x = eq, mask = forestBiomes, filename = "./1KMGlobalForest_5kmFocal_EquationNormMaskedForestBiomes.tif", overwrite = TRUE)
+eq <- raster("./1KMGlobalForest_5kmFocal_EquationNormMaskedForestBiomes.tif")
+plot(eq)
 
 ####### Hansen analysis
 ### 3
