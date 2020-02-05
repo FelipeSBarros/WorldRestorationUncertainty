@@ -7,12 +7,22 @@
 * 'Tropical & Subtropical Dry Broadleaf Forests'  
 * 'Tropical & Subtropical Moist Broadleaf Forests'  
 
-### The KML was sent to GEE and the analysis resultas done there, were clipped to this area;
+### The KML was sent to GEE and the analysis results done there, were clipped to this area;
 
-## 2) Using GEE (https://code.earthengine.google.com/46c209046cecd3349e5b36eed5de67e3) the following analysiswas done:  
+## 2) Using GEE were done:  
 * Using Hansen's data v1.4(2000-2016), the forest loss were taken from forest density;  
 * Forest remnants were maked to the forest areas defined on step 1;  
 * The mean forest density density was estimated using a focal/movingwindow/kernel analysis considering ~5Km circle buffer;  
+* [link to code](https://code.earthengine.google.com/46c209046cecd3349e5b36eed5de67e3)  
+
+### Other GEE scripts (links):  
+* [Initial](https://code.earthengine.google.com/ee57d78a932c5e95c5ab56dcaef19603)  
+* [restorable amount](https://code.earthengine.google.com/079754710339963fac26f32d22946f8d)  
+* [Data analysis](https://code.earthengine.google.com/47316572b4a40cfa1efe5118ba60965d)  
+* [Mask World Restoration Uncertainty](https://code.earthengine.google.com/02809f2d3a3a6887b8cacc6920d963ff)  
+* [Mask WRU2](https://code.earthengine.google.com/286a834b58ce27a1cb779028535e8f9e)  
+* [World Restoration Uncertainty script](https://code.earthengine.google.com/70f9f5436cf9b4335e52e8858016172e)  
+* [WRU script 2](https://code.earthengine.google.com/ca16196518d9ca4d2a09d51f84b6931f)  
 
 ## 3) On PC (bash/gdal):
 * Adequating GEE results, setting the same extent, and pixel alignment;  
